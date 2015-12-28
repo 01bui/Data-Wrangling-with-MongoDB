@@ -13,12 +13,20 @@ DATADIR = ""
 DATAFILE = "beatles-diskography.csv"
 
 
+
 def parse_file(datafile):
     data = []
     with open(datafile, "r") as f:
+        keys = f.readline()
+        keys = keys.strip()
+        key = keys.split(',')
+        #print key
         for line in f:
-            print line
-
+            value = line.strip()
+            value = value.split(',')
+            row = dict(zip(key, value))
+            data.append(row)
+        #print data
     return data
 
 
@@ -28,7 +36,10 @@ def test():
     d = parse_file(datafile)
     firstline = {'Title': 'Please Please Me', 'UK Chart Position': '1', 'Label': 'Parlophone(UK)', 'Released': '22 March 1963', 'US Chart Position': '-', 'RIAA Certification': 'Platinum', 'BPI Certification': 'Gold'}
     tenthline = {'Title': '', 'UK Chart Position': '1', 'Label': 'Parlophone(UK)', 'Released': '10 July 1964', 'US Chart Position': '-', 'RIAA Certification': '', 'BPI Certification': 'Gold'}
-
+    print firstline
+    print d[0]
+    print tenthline
+    print d[9]
     assert d[0] == firstline
     assert d[9] == tenthline
 
