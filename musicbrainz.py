@@ -54,23 +54,71 @@ def main():
     the structure one level at a time or copy the output to a separate output
     file.
     '''
-    results = query_by_name(ARTIST_URL, query_type["simple"], "Nirvana")
-    pretty_print(results)
+    #results = query_by_name(ARTIST_URL, query_type["simple"], "Nirvana")
+    #pretty_print(results)
 
-    artist_id = results["artists"][1]["id"]
-    print "\nARTIST:"
-    pretty_print(results["artists"][1])
+    #artist_id = results["artists"][1]["id"]
+    #print "\nARTIST:"
+    #pretty_print(results["artists"][1])
 
-    artist_data = query_site(ARTIST_URL, query_type["releases"], artist_id)
-    releases = artist_data["releases"]
-    print "\nONE RELEASE:"
-    pretty_print(releases[0], indent=2)
-    release_titles = [r["title"] for r in releases]
+    #artist_data = query_site(ARTIST_URL, query_type["releases"], artist_id)
+    #releases = artist_data["releases"]
+    #print "\nONE RELEASE:"
+    #pretty_print(releases[0], indent=2)
+    #release_titles = [r["title"] for r in releases]
 
-    print "\nALL TITLES:"
-    for t in release_titles:
-        print t
+    #print "\nALL TITLES:"
+    #for t in release_titles:
+        #print t
 
+    first_aid_kit = query_by_name(ARTIST_URL, query_type["simple"], "First Aid Kit")
+    #pretty_print(first_aid_kit)
+    bands = first_aid_kit["artists"]
+    num_bands = [r["name"] for r in bands]
+    count_band = 0
+    for band in num_bands:
+        if band == "First Aid Kit":
+            count_band += 1
+    print "Number of bands named First Aid Kit: " + str(count_band)
+
+
+    queen_data = query_by_name(ARTIST_URL, query_type["simple"], "Queen")
+    #pretty_print(queen_data)
+    queen = queen_data["artists"]
+    for i in queen:
+        #print i
+        if i["name"] == "Queen":
+            print "Begin_area name for Queen: "+ i["begin-area"]["name"]
+            break
+
+    beatles_data = query_by_name(ARTIST_URL, query_type["simple"], "Beatles")
+    #pretty_print(beatles_data)
+    beatles = beatles_data["artists"]
+    for i in beatles:
+        #print i
+        if i["name"] == "The Beatles":
+            print "Spanish alias for Beatles: "
+            for j in i["aliases"]:
+                print j["name"]
+            break
+
+    nirvana_data = query_by_name(ARTIST_URL, query_type["simple"], "Nirvana")
+    #pretty_print(beatles_data)
+    nirvana = nirvana_data["artists"]
+    for i in nirvana:
+        #print i
+        if i["name"] == "Nirvana":
+            print i
+            print i["disambiguation"]
+
+    oneD_data = query_by_name(ARTIST_URL, query_type["simple"], "One Direction")
+    #pretty_print(beatles_data)
+    oneD = oneD_data["artists"]
+    for i in oneD:
+        #print i
+        if i["name"] == "One Direction":
+            print i
+            print i["life-span"]
 
 if __name__ == '__main__':
     main()
