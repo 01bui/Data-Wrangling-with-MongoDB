@@ -19,12 +19,35 @@ import os
 DATADIR = ""
 DATAFILE = "745090.csv"
 
+import numpy
 
 def parse_file(datafile):
     name = ""
     data = []
     with open(datafile,'rb') as f:
-        pass
+        reader = csv.reader(f, delimiter=',')
+        first_line = reader.next()
+        print first_line
+        name = first_line[1]
+        reader.next()
+        x=list(reader)
+        data=numpy.array(x)
+        print name
+        print data[0][1]
+        print data[2][0]
+        print data[2][5]
+
+        ## Udacity's solution
+        #def parse_file(datafile):
+        #name = ""
+        #data = []
+        #with open(datafile,'rb') as f:
+            #r = csv.reader(f)
+            #name = r.next()[1]
+            #header = r.next()
+            #data = [row for row in r]
+
+    return (name, data)
     # Do not change the line below
     return (name, data)
 
