@@ -24,7 +24,15 @@ def get_authors(root):
         }
 
         # YOUR CODE HERE
-
+        for info in author:
+            #print info.tag, info.text
+            if info.tag == "fnm":
+                data.update({info.tag: info.text})
+            if info.tag == "snm":
+                data.update({info.tag: info.text})
+            if info.tag == "email":
+                data.update({info.tag: info.text})
+        #print data
         authors.append(data)
 
     return authors
