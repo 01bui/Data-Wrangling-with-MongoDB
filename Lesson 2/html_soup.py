@@ -18,6 +18,21 @@ def extract_data(page):
             "viewstate": ""}
     with open(page, "r") as html:
         # do something here to find the necessary values
+        # Your task is to process the HTML using BeautifulSoup, extract the hidden
+        # form field values for "__EVENTVALIDATION" and "__VIEWSTATE" and set the appropriate
+        # values in the data dictionary.
+        soup = BeautifulSoup(html, 'html.parser')
+        #print(soup.prettify())
+
+        eventvalidation = soup.find(id="__EVENTVALIDATION")
+        #print eventvalidation
+        #print eventvalidation.get('value')
+        data['eventvalidation'] = eventvalidation.get('value')
+
+        viewstate = soup.find(id="__VIEWSTATE")
+        #print viewstate
+        #print viewstate.get('value')
+        data['viewstate'] = viewstate.get('value')
         pass
 
     return data
