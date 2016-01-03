@@ -33,6 +33,7 @@ def get_authors(root):
         id = []
         for item in author.findall('./insr'):
             id.append(item.attrib['iid'])
+            #data["insr"].append(i.attrib["iid"])
         #print id
         data["insr"] = id
         authors.append(data)
