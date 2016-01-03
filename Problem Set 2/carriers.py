@@ -32,6 +32,7 @@ def extract_carriers(page):
             for i in item.find_all('option'):
                 if len(i.get('value')) == 3:
                     airportList.append(i.get('value'))
+        data = airportList[1:]
         #print airportList[2:]
         #data['airport'] = airportList[1:]
 
@@ -39,7 +40,7 @@ def extract_carriers(page):
         for item in soup.find_all('select',id="CarrierList"):
             for i in item.find_all('option'):
                 carrierList.append(i.get('value'))
-        data = carrierList[3:]
+        #data = carrierList[3:]
     #print data
     #print len(data)
     return data
