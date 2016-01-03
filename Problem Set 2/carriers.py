@@ -10,6 +10,7 @@
 # You should return a list of codes for the carriers.
 
 from bs4 import BeautifulSoup
+import requests
 html_page = "options.html"
 
 
@@ -20,6 +21,27 @@ def extract_carriers(page):
         # do something here to find the necessary values
         soup = BeautifulSoup(html, "lxml")
 
+        #eventvalidation = soup.find(id="__EVENTVALIDATION")
+        #data['eventvalidation'] = eventvalidation.get('value')
+
+        #viewstate = soup.find(id="__VIEWSTATE")
+        #data['viewstate'] = viewstate.get('value')
+
+        airportList = []
+        for item in soup.find_all('select',id="AirportList"):
+            for i in item.find_all('option'):
+                if len(i.get('value')) == 3:
+                    airportList.append(i.get('value'))
+        #print airportList[2:]
+        #data['airport'] = airportList[1:]
+
+        carrierList = []
+        for item in soup.find_all('select',id="CarrierList"):
+            for i in item.find_all('option'):
+                carrierList.append(i.get('value'))
+        data = carrierList[3:]
+    #print data
+    #print len(data)
     return data
 
 
