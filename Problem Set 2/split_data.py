@@ -7,6 +7,7 @@
 # so that you can process the resulting files as valid XML documents.
 
 import xml.etree.ElementTree as ET
+import os
 PATENTS = 'patent.data'
 
 def get_root(fname):
@@ -20,9 +21,25 @@ def split_file(filename):
     # As a hint - each patent declaration starts with the same line that was causing the error
     # The new files should be saved with filename in the following format:
     # "{}-{}".format(filename, n) where n is a counter, starting from 0.
+    def files():
+        n = 0
+        while True:
+            yield open("{}-{}".format(filename, n), 'w')
+            n += 1
 
-    pass
+    pat = '<?xml version="1.0" encoding="UTF-8"?>'
+    fs = files()
 
+    with open(filename) as infile:
+        for line in infile:
+            if pat in line:
+                outfile = next(fs)
+                items = line.split(pat)
+                outfile.write(items[0])
+                for item in items[1:]:
+                    outfile.write(pat + item)
+            else:
+                outfile.write(line)
 
 def test():
     split_file(PATENTS)
