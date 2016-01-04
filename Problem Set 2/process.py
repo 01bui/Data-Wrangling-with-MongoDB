@@ -55,13 +55,42 @@ def process_file(f):
     """
     data = []
     info = {}
+
     info["courier"], info["airport"] = f[:6].split("-")
+    #print info
     # Note: create a new dictionary for each entry in the output data list.
     # If you use the info dictionary defined here each element in the list
     # will be a reference to the same info dictionary.
     with open("{}/{}".format(datadir, f), "r") as html:
+        values = []
+        soup = BeautifulSoup(html,"html.parser")
+        for item in soup.find_all('table',id="DataGrid1"):
+            for j in item.find_all('tr'):
+                #print j
+                for i in j.find_all('td'):
+                    #print i
+                    for string in i.strings:
+                        values.append(string)
 
-        soup = BeautifulSoup(html)
+        #print values[5:]
+        values = values[5:]
+
+        for i in range(0, len(values), 5):
+            info = {}
+            flights = {}
+            #print values[i], values[i+1], values[i+2], values[i+3]
+            if values[1+i] != "TOTAL":
+                info["courier"], info["airport"] = f[:6].split("-")
+                info["year"] = int(values[0+i])
+                info["month"] = int(values[1+i])
+                flights["domestic"] = int(values[2+i].replace(',', ''))
+                flights["international"] = int(values[3+i].replace(',', ''))
+                info["flights"] = flights
+                #print info
+                data.append(info)
+            #print info
+    #print len(data)
+
 
     return data
 
@@ -69,11 +98,15 @@ def process_file(f):
 def test():
     print "Running a simple test..."
     open_zip(datadir)
+    print
     files = process_all(datadir)
     data = []
+    #print files
     for f in files:
+        #print f
         data += process_file(f)
-
+        #print process_file(f)
+    #print len(data)
     assert len(data) == 399  # Total number of rows
     for entry in data[:3]:
         assert type(entry["year"]) == int
