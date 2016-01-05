@@ -24,22 +24,54 @@ OUTPUT_GOOD = 'autos-valid.csv'
 OUTPUT_BAD = 'FIXME-autos.csv'
 
 def process_file(input_file, output_good, output_bad):
-
+    data = []
     with open(input_file, "r") as f:
         reader = csv.DictReader(f)
         header = reader.fieldnames
-
         #COMPLETE THIS FUNCTION
 
+        #- check if the field "productionStartYear" contains a year
+        goodData = []
+        badData = []
+        for field in reader:
+            if field["URI"].startswith("http://dbpedia.org/") == 1:
+                field["productionStartYear"] = field["productionStartYear"][0:4]
+                year = field["productionStartYear"]
+                try:
+                    if (int(year) >= 1886) and (int(year) <= 2014):
+                        goodData.append(field)
+                    else:
+                        badData.append(field)
+                except ValueError:
+                    if year == 'NULL':
+                        badData.append(field)
+
+        #print badData
+        #- the rest of the fields and values should stay the same
+        #- if the value of the field is a valid year in the range as described above,
+        # write that line to the output_good file
+        with open(output_good, "w") as g:
+            writer = csv.DictWriter(g, delimiter=",", fieldnames= header)
+            writer.writeheader()
+            for row in goodData:
+                writer.writerow(row)
+        #- if the value of the field is not a valid year as described above,
+        #write that line to the output_bad file
+        with open(output_bad, "w") as g:
+            writer = csv.DictWriter(g, delimiter=",", fieldnames= header)
+            writer.writeheader()
+            for row in badData:
+                writer.writerow(row)
+        #- discard rows (neither write to good nor bad) if the URI is not from dbpedia.org
 
 
     # This is just an example on how you can use csv.DictWriter
     # Remember that you have to output 2 files
-    with open(output_good, "w") as g:
-        writer = csv.DictWriter(g, delimiter=",", fieldnames= header)
-        writer.writeheader()
-        for row in YOURDATA:
-            writer.writerow(row)
+    # with open(output_good, "w") as g:
+    #    writer = csv.DictWriter(g, delimiter=",", fieldnames= header)
+    #    writer.writeheader()
+    #    for row in YOURDATA:
+    #        writer.writerow(row)
 
 
 def test():
