@@ -15,7 +15,9 @@ from datetime import datetime
 def range_query():
     # Modify the below line with your query.
     # You can use datetime(year, month, day) to specify date in the query
-    query = {}
+    query = {'foundingDate':
+                 {"$gte" : datetime(2001, 1, 1, 0, 0)}
+             }
     return query
 
 # Do not edit code below this line in the online code editor.
