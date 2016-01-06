@@ -12,6 +12,7 @@ from autos import process_file
 def insert_autos(infile, db):
     data = process_file(infile)
     # Add your code here. Insert the data in one command.
+    result = db.autos.insert(data)
 
 
 if __name__ == "__main__":
