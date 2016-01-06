@@ -14,7 +14,7 @@ https://www.udacity.com/wiki/ud032
 
 def porsche_query():
     # Please fill in the query to find all autos manuafactured by Porsche.
-    query = {}
+    query = {"name" : "Porsche Boxster"}
     return query
 
 
@@ -30,7 +30,6 @@ def get_db(db_name):
 def find_porsche(db, query):
     # For local use
     return db.autos.find(query)
-
 
 if __name__ == "__main__":
     # For local use
