@@ -16,6 +16,7 @@ import codecs
 import csv
 import json
 import pprint
+from decimal import *
 
 CITIES = 'cities.csv'
 
@@ -23,6 +24,36 @@ CITIES = 'cities.csv'
 def fix_area(area):
 
     # YOUR CODE HERE
+
+    # YOUR CODE HERE
+    try:
+        thisNum = float(area)
+        decimalPoint = thisNum - int(thisNum)
+        if decimalPoint == 0:
+            int(area)
+    except ValueError:
+        if (area == "NULL") or (area == ""):
+            area = None
+        elif area.startswith("{"):
+            values = area[1:-1].split("|")
+            value1Count = int(values[1].split("+")[1])
+            value0Count = int(values[0].split("+")[1])
+
+            value1C = (values[1].split("e")[0])
+            value0C = (values[0].split("e")[0])
+
+            print values, value0Count, value1Count, value0C, value1C
+            if len(value1C) > len(value0C) and value1Count > value0Count:
+                area = float(values[1])
+                #print values, area
+            if len(value0C) > len(value1C) and value1Count < value0Count:
+                area = float(values[0])
+            if value1Count == value0Count:
+                print values
+                if len(value0C) > len(value1C):
+                    area = float(values[0])
+                else:
+                    area = float(values[1])
 
     return area
 
@@ -55,6 +86,11 @@ def test():
     print "Printing three example results:"
     for n in range(5,8):
         pprint.pprint(data[n]["areaLand"])
+
+    print data[8]["areaLand"]
+    print data[20]["areaLand"]
+    print data[33]["areaLand"]
+
 
     assert data[3]["areaLand"] == None
     assert data[8]["areaLand"] == 55166700.0
