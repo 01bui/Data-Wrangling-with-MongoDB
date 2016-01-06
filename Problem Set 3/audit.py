@@ -27,6 +27,7 @@ import codecs
 import csv
 import json
 import pprint
+import pdb
 
 CITIES = 'cities.csv'
 
@@ -36,14 +37,44 @@ FIELDS = ["name", "timeZone_label", "utcOffset", "homepage", "governmentType_lab
 
 def audit_file(filename, fields):
     fieldtypes = {}
+    for field in FIELDS:
+        fieldtypes.update({field: set()})
 
     # YOUR CODE HERE
+    with open(filename, "r") as f:
+        reader = csv.DictReader(f)
+        header = reader.fieldnames
+        reader.next()
+        reader.next()
+        reader.next() # Skip the first three lines
+        for row in reader:
+            #print row
+            for field in FIELDS:
+                #pdb.set_trace()
+                #print row[field]
 
+                try:
+                    thisNum = float(row[field])
+                    decimalPoint = thisNum - int(thisNum)
+                    if decimalPoint == 0:
+                        thisType = type(1) #int
+                    thisType = type(1.1) #float
+                    fieldtypes[field].add(thisType)
+                except ValueError:
+                    if (row[field] == "NULL") or (row[field] == ""):
+                        fieldtypes[field].add(type(None))
+                    elif row[field].startswith("{"):
+                        fieldtypes[field].add(type([]))
+                    else:
+                        thisType = type(row[field]) #str type
+                        fieldtypes[field].add(thisType)
 
+    #print fieldtypes
     return fieldtypes
 
 
 def test():
+    print set([type(1.1), type([]), type(None)])
     fieldtypes = audit_file(CITIES, FIELDS)
 
     pprint.pprint(fieldtypes)
