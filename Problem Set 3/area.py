@@ -42,18 +42,21 @@ def fix_area(area):
             value1C = (values[1].split("e")[0])
             value0C = (values[0].split("e")[0])
 
-            print values, value0Count, value1Count, value0C, value1C
+            #print values, value0Count, value1Count, value0C, value1C
             if len(value1C) > len(value0C) and value1Count > value0Count:
                 area = float(values[1])
                 #print values, area
             if len(value0C) > len(value1C) and value1Count < value0Count:
                 area = float(values[0])
             if value1Count == value0Count:
-                print values
+                #print values
                 if len(value0C) > len(value1C):
                     area = float(values[0])
                 else:
                     area = float(values[1])
+        else:
+            area = float(area)
+            print area
 
     return area
 
