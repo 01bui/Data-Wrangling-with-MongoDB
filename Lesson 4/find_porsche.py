@@ -34,6 +34,21 @@ def find_porsche(db, query):
 if __name__ == "__main__":
     # For local use
     db = get_db('examples')
+    db.autos.insert({
+	    "layout" : "rear mid-engine rear-wheel-drive layout",
+	    "name" : "Porsche Boxster",
+	    "productionYears" : [ ],
+	    "modelYears" : [ ],
+	    "bodyStyle" : "roadster",
+	    "assembly" : [
+		    "Finland",
+		    "Germany",
+		    "Stuttgart",
+		    "Uusikaupunki"
+	    ],
+	    "class" : "sports car",
+	    "manufacturer" : "Porsche"
+    })
     query = porsche_query()
     results = find_porsche(db, query)
 
