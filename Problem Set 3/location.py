@@ -25,8 +25,12 @@ CITIES = 'cities.csv'
 
 def check_loc(point, lat, longi):
     # YOUR CODE HERE
+    latP, longP = point.split(" ")
+    if latP == lat and longP == longi:
+        return True
+    else:
+        return False
 
-    pass
 
 
 def process_file(filename):
