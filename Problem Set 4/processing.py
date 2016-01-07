@@ -58,6 +58,7 @@ FIELDS ={'rdf-schema#label': 'label',
 def process_file(filename, fields):
 
     process_fields = fields.keys()
+    #print process_fields
     data = []
     with open(filename, "r") as f:
         reader = csv.DictReader(f)
@@ -66,7 +67,31 @@ def process_file(filename, fields):
 
         for line in reader:
             # YOUR CODE HERE
-            pass
+            out = {}
+            out['classification'] = {}
+            for field, val in line.iteritems():
+                if field not in process_fields:
+                    continue
+                if field in ['rdf-schema#label', 'URI', 'rdf-schema#comment', 'synonym', 'name']:
+                    if val == "NULL": #if a value of a field is "NULL", convert it to None
+                        val = None
+                    if val != None: #if a value of a field is "NULL", convert it to None
+                        val = val.strip()
+                    if field == 'rdf-schema#label':
+                        val = val.split(" ")[0] # trim out redundant description in parenthesis
+                    if field == 'name' and (val == None or not val.isalpha() ): # if 'name' is "NULL" or contains non-alphanumeric characters, set it to the same value as 'label'
+                        val = line['rdf-schema#label']
+                    if field == 'synonym' and  val != None: # if there is a value in 'synonym', it should be converted to an array (list)
+                        val = parse_array(val)
+                    out.update({fields[field] : val})
+                if field in ['family_label', 'class_label', 'phylum_label', 'order_label', 'kingdom_label', 'genus_label']:
+                    if val == "NULL": #if a value of a field is "NULL", convert it to None
+                        val = None
+                    if val != None: #if a value of a field is "NULL", convert it to None
+                        val = val.strip()
+                    out['classification'].update({fields[field]:val})
+
+            data.append(out)
     return data
 
 
@@ -82,7 +107,9 @@ def parse_array(v):
 
 def test():
     data = process_file(DATAFILE, FIELDS)
-    print "Your first entry:"
+    #for item in data:
+    #    pprint.pprint(item)
+    #print "Your first entry:"
     pprint.pprint(data[0])
     first_entry = {
         "synonym": None,
@@ -99,6 +126,7 @@ def test():
         "label": "Argiope",
         "description": "The genus Argiope includes rather large and spectacular spiders that often have a strikingly coloured abdomen. These spiders are distributed throughout the world. Most countries in tropical or temperate climates host one or more species that are similar in appearance. The etymology of the name is from a Greek name meaning silver-faced."
     }
+    #pprint.pprint(first_entry)
 
     assert len(data) == 76
     assert data[0] == first_entry
