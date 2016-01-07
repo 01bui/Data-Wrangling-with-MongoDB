@@ -92,6 +92,9 @@ def process_file(filename, fields):
                     out['classification'].update({fields[field]:val})
 
             data.append(out)
+    # Write data to json file
+    with codecs.open("arachnid.json".format(), encoding='utf-8', mode='w') as v:
+        v.write(json.dumps(data, indent=2))
     return data
 
 
