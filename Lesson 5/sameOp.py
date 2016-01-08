@@ -33,7 +33,17 @@ def get_db(db_name):
 
 def make_pipeline():
     # complete the aggregation pipeline
-    pipeline = [ ]
+    # What is the average city population for a region in India? Calculate your answer by first
+    # finding the average population of cities in each region and then by calculating the average of the
+    # regional averages.
+    pipeline = [
+        {"$match": {"country": "India"}},
+        { "$unwind" : "$isPartOf" },
+        { "$group" :{ "_id" : "$isPartOf" ,
+                     "regional_averages" : { "$avg" : "$population" }}},
+        { "$group" :{ "_id" : "India Regional City Population Average" ,
+                     "avg" : { "$avg" : "$regional_averages" }}}
+    ]
     return pipeline
 
 def aggregate(db, pipeline):
