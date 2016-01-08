@@ -17,9 +17,14 @@ def get_user(element):
 
 def process_map(filename):
     users = set()
+    uids = []
     for _, element in ET.iterparse(filename):
-        pass
-
+        try:
+            uids.append(element.attrib['uid'])
+        except KeyError:
+            #print element.tag
+            continue
+    users = set(uids)
     return users
 
 
