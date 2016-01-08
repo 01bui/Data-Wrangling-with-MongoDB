@@ -30,12 +30,30 @@ lower = re.compile(r'^([a-z]|_)*$')
 lower_colon = re.compile(r'^([a-z]|_)*:([a-z]|_)*$')
 problemchars = re.compile(r'[=\+/&<>;\'"\?%#$@\,\. \t\r\n]')
 
+lower_count = 0
+lower_colon_count = 0
+problemchars_count = 0
+other_count = 0
 
 def key_type(element, keys):
+    keys = {}
+    global lower_count, lower_colon_count, problemchars_count, other_count
     if element.tag == "tag":
         # YOUR CODE HERE
-        pass
+        if lower.search(element.attrib['k']):
+            lower_count += 1
+        elif lower_colon.search(element.attrib['k']):
+            lower_colon_count += 1
+        elif problemchars.search(element.attrib['k']):
+            print element.attrib['k']
+            problemchars_count += 1
+        else:
+            other_count += 1
 
+    keys["lower"] = lower_count
+    keys["lower_colon"] = lower_colon_count
+    keys["problemchars"] = problemchars_count
+    keys["other"] = other_count
     return keys
 
 
