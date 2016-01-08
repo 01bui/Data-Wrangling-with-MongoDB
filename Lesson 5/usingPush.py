@@ -33,7 +33,13 @@ def get_db(db_name):
 
 def make_pipeline():
     # complete the aggregation pipeline
-    pipeline = [ ]
+    pipeline = [
+        { "$group" :{ "_id" : "$user.screen_name" ,
+                      "count": {"$sum": 1},
+                     "tweet_texts" : { "$push" : "$text" }}},
+        { "$sort" : { "count" : -1}},
+        { "$limit" : 5 }
+    ]
     return pipeline
 
 def aggregate(db, pipeline):
@@ -48,4 +54,3 @@ if __name__ == '__main__':
     pprint.pprint(result)
     assert len(result) == 5
     assert result[0]["count"] > result[4]["count"]
-    
