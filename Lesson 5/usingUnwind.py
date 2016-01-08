@@ -33,7 +33,7 @@ def make_pipeline():
     # complete the aggregation pipeline
     pipeline = [
         { "$unwind" : "$isPartOf" },
-        { "$group" :{ "_id" : "$name" ,
+        { "$group" :{ "_id" : "isPartOf" ,
                      "count" : { "$sum" : 1 }}},
         { "$sort" : { "count" : -1}},
         { "$limit" : 1 }
