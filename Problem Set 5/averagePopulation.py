@@ -32,7 +32,18 @@ def get_db(db_name):
 
 def make_pipeline():
     # complete the aggregation pipeline
-    pipeline = [ ]
+    # find the average regional city population for all countries in the cities collection.
+    # What we are asking here is that you first calculate the
+    # average city population for each region in a country and then calculate the average of all the
+    # regional averages for a country.
+    pipeline = [
+        { "$unwind" : "$isPartOf" },
+        { "$group" :{ "_id" : {"country":"$country","isPartOf": "$isPartOf"} ,
+                     "regional_averages" : { "$avg" : "$population" }}},
+        { "$group" :{ "_id" : "$_id.country" ,
+                     "avgRegionalPopulation" : { "$avg" : "$regional_averages" }}}
+
+    ]
     return pipeline
 
 def aggregate(db, pipeline):
