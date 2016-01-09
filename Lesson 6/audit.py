@@ -23,7 +23,9 @@ expected = ["Street", "Avenue", "Boulevard", "Drive", "Court", "Place", "Square"
 
 # UPDATE THIS VARIABLE
 mapping = { "St": "Street",
-            "St.": "Street"
+            "St.": "Street",
+            "Rd.": "Road",
+            "Ave": "Avenue"
             }
 
 
@@ -51,18 +53,21 @@ def audit(osmfile):
 
     return street_types
 
-
 def update_name(name, mapping):
-
     # YOUR CODE HERE
+    st = name.split(" ")
+    #print st
+    if  st[-1] in mapping:
+        st[-1] = mapping[st[-1]]
 
+    name = " ".join(st)
+    print name
     return name
-
 
 def test():
     st_types = audit(OSMFILE)
     assert len(st_types) == 3
-    pprint.pprint(dict(st_types))
+   # pprint.pprint(dict(st_types))
 
     for st_type, ways in st_types.iteritems():
         for name in ways:
