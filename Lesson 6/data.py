@@ -95,9 +95,45 @@ CREATED = [ "version", "changeset", "timestamp", "user", "uid"]
 
 def shape_element(element):
     node = {}
+
     if element.tag == "node" or element.tag == "way" :
         # YOUR CODE HERE
+        node.update({"type":element.tag})
+        tempDict = {}
+        for attr in element.attrib:
+            #print attr, element.attrib[attr]
+            if attr not in CREATED:
+                #print attr, element.attrib[attr]
+                if attr == "lat" or attr == "lon":
+                    lat = float(element.attrib["lat"])
+                    lon = float(element.attrib["lon"])
+                    node.update({"pos":[lat,lon]})
+                else:
+                    node.update({attr : element.attrib[attr]})
 
+            if attr in CREATED:
+                tempDict.update({attr : element.attrib[attr]})
+                node.update({"created":tempDict})
+        tempDictTag = {}
+        for tag in element.iter("tag"):
+            if problemchars.search(tag.attrib['k']):
+                continue
+            if tag.attrib['k'].startswith('addr:'):
+                #print tag.attrib, tag.attrib['k'], tag.attrib['v']
+                item = tag.attrib['k'].split(":")
+                if len(item) == 2:
+                    tempDictTag.update({item[1]:tag.attrib['v']})
+                    node.update({"address":tempDictTag})
+                else:
+                    continue
+            else:
+                node.update({tag.attrib['k'] : tag.attrib['v']})
+        refs = []
+        for tag in element.iter("nd"):
+            #print tag.attrib
+            if tag.attrib['ref']:
+                refs.append(tag.attrib['ref'])
+                node.update({"node_refs":refs})
         return node
     else:
         return None
@@ -123,7 +159,6 @@ def test():
     # call the process_map procedure with pretty=False. The pretty=True option adds
     # additional spaces to the output, making it significantly larger.
     data = process_map('example.osm', True)
-    #pprint.pprint(data)
 
     correct_first_elem = {
         "id": "261114295",
@@ -138,6 +173,11 @@ def test():
             "timestamp": "2012-03-28T18:31:23Z"
         }
     }
+
+    pprint.pprint(data[0])
+    pprint.pprint(correct_first_elem)
+
+
     assert data[0] == correct_first_elem
     assert data[-1]["address"] == {
                                     "street": "West Lexington St.",
